@@ -1,0 +1,79 @@
+<head>
+    <title>正计时</title>
+    <style>
+        body{
+            text-align: center;
+        }
+        #title{
+            margin-top: 150px;
+            font-size: 60px;
+        }
+        #timer{
+            font-size: 60px;
+        }
+        button{
+            margin-top: 20px;
+            font-size: 50px;
+            border-radius: 50px;
+        }
+        #reset{
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">Timer</div>
+    <div id="timer">00:00:00</div>
+    <button id="control">start/pause</button>
+    <button id="reset">reset</button>
+
+    <script>
+    let interval;
+    let isRunning = false;
+
+    function process() {
+        const timerElement = document.getElementById("timer");
+        const currentTime = timerElement.innerHTML;
+
+        //递增秒数
+        let [hours, minutes, seconds] = currentTime.split(":").map(Number);
+        seconds++;
+        if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+        }
+        if (minutes === 60) {
+            minutes = 0;
+            hours++;
+        }
+
+        // 格式化为两位数
+        const formattedHours = String(hours).padStart(2, "0");
+        const formattedMinutes = String(minutes).padStart(2, "0");
+        const formattedSeconds = String(seconds).padStart(2, "0");
+
+        // 更新计时器显示
+        timerElement.innerHTML = `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    }
+
+
+    document.getElementById("control").onclick = function () {
+      if (isRunning === true) {
+        clearInterval(interval); //停止计时器
+        isRunning = false;
+      } else {
+        interval = setInterval(process, 1000); //每秒执行一次process函数
+        isRunning = true;
+      }
+    };
+
+    document.getElementById("reset").onclick = function () {
+      if (isRunning === true) {
+        clearInterval(interval);
+        isRunning = false;
+      }
+      document.getElementById("timer").innerHTML = "00:00:00";
+    };
+    </script>
+
+</body>
